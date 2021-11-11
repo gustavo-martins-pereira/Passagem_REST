@@ -71,22 +71,25 @@ public class PassagemResource {
 		// Prepara a URI para redirecionar o cliente para a nova passagem
 		URI uri = new URI("passagens/" + passagem.getId());
 		
-		return Response.created(uri).build();
+		return Response.created(uri).status(Status.CREATED).build();
 	}
 	
 	// Atualiza uma Passagem que já existe no banco de acordo com o "id" passado como parâmetro pela requisição HTTP
 	@PUT
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String update(@PathParam("id") Integer id ,String passagemJson) {
-		Passagem passagem = new Gson().fromJson(passagemJson, Passagem.class);
+	public Response update(@PathParam("id") Integer id ,String passagemJson) throws URISyntaxException {
+		Passagem newPassagem = new Gson().fromJson(passagemJson, Passagem.class);
 		
-		PassagemDAO.updatePassagem(id, passagem);
-		passagem = PassagemDAO.findById(id);
+		Passagem oldPassagem = PassagemDAO.findById(id);
 		
-		//Not found 404
-		
-		return passagem.toJson();
+		if(oldPassagem == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		} else {
+			PassagemDAO.updatePassagem(id, newPassagem);
+			
+			return Response.ok().build();
+		}
 	}
 	
 	// Deleta uma passagem do banco
