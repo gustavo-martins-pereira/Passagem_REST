@@ -44,18 +44,19 @@ public class PassagemDAO {
 	}
 	
 	//Atualiza a Passagem
-//	public static void updatePassagem(Integer id, HttpServletRequest request) {
-//		Passagem passagem = em.find(Passagem.class, id);
-//		
-//		em.getTransaction().begin();
-//
-//		passagem.setNomeDoPassageiro(request.getParameter("nome"));
-//		passagem.setOrigem(request.getParameter("origem"));
-//		passagem.setDestino(request.getParameter("destino"));
-//		passagem.setValorDaPassagem(Double.valueOf(request.getParameter("valor")));
-//		
-//		em.getTransaction().commit();
-//	}
+	public static void updatePassagem(Passagem newPassagem) {
+		// Procura a passagem com este id no banco
+		Passagem passagem = em.find(Passagem.class, newPassagem.getId());
+		
+		em.getTransaction().begin();
+		
+		passagem.setNomeDoPassageiro(newPassagem.getNomeDoPassageiro());
+		passagem.setOrigem(newPassagem.getOrigem());
+		passagem.setDestino(newPassagem.getDestino());
+		passagem.setValorDaPassagem(newPassagem.getValorDaPassagem());
+		
+		em.getTransaction().commit();
+	}
 
 	//Deleta a Passagem
 	public static void deletePassagem(Integer id) {
