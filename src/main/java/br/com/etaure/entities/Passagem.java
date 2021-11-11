@@ -1,4 +1,4 @@
-package br.com.alura.loja.entities;
+package br.com.etaure.entities;
 
 import java.io.Serializable;
 

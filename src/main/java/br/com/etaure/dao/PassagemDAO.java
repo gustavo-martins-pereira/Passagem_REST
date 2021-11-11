@@ -1,4 +1,4 @@
-package br.com.alura.loja.dao;
+package br.com.etaure.dao;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import br.com.alura.loja.entities.Passagem;
+import br.com.etaure.entities.Passagem;
 
 public class PassagemDAO {
 

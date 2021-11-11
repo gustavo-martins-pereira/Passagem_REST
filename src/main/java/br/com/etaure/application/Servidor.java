@@ -1,4 +1,4 @@
-package br.com.alura.loja;
+package br.com.etaure.application;
 
 import java.io.IOException;
 import java.net.URI;
@@ -11,7 +11,7 @@ public class Servidor {
 
 	public static void main(String[] args) throws IOException {
 
-		ResourceConfig config = new ResourceConfig().packages("br.com.alura.loja");
+		ResourceConfig config = new ResourceConfig().packages("br.com.etaure");
 		URI uri = URI.create("http://localhost:8080/");
 
 		HttpServer server = GrizzlyHttpServerFactory.createHttpServer(uri, config);
