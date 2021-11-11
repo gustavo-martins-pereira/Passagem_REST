@@ -10,6 +10,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 
 import com.google.gson.Gson;
 
@@ -22,16 +25,25 @@ public class PassagemResource {
 	// Lista todas as Passagens
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String listAll() {
+	public Response listAll() {
 		List<Passagem> passagens = PassagemDAO.findAll();
 		
-		StringBuilder sb = new StringBuilder();
-		
-		for (Passagem passagem : passagens) {
-			sb.append(passagem.toJson());
+		if(passagens.isEmpty()) {
+			// Caso não tenha conteúdo retorna o código 204
+			ResponseBuilder responseBuilder;
+			responseBuilder = Response.status(Status.NO_CONTENT);
+			
+			return responseBuilder.build();
+		} else {
+			// Caso tenha ao menos 1 passagem, retorna todas as passagens registradas
+			StringBuilder sb = new StringBuilder();
+			
+			for (Passagem passagem : passagens) {
+				sb.append(passagem.toJson());
+			}
+			
+			return Response.ok(sb.toString()).build();
 		}
-		
-		return sb.toString();
 	}
 	
 	// Lista a Passagem com o id passado por parâmetro
@@ -42,6 +54,8 @@ public class PassagemResource {
 		Passagem passagem = PassagemDAO.findById(id);
 		
 		return passagem.toJson();
+		
+		// Quando não encontrar, retornar um 404
 	}
 	
 	// Insere uma nova Passagem para o banco de dados
@@ -49,21 +63,26 @@ public class PassagemResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String add(String passagemJson) {
 		Passagem passagem = new Gson().fromJson(passagemJson, Passagem.class);
+		// Melhoria pra trazer sem id
 		passagem.setId(null);
 		
 		PassagemDAO.insert(passagem);
 		
+		// retorna 201
 		return passagem.toJson();
 	}
 	
 	// Atualiza uma Passagem que já existe no banco de acordo com o "id" passado como parâmetro pela requisição HTTP
 	@PUT
+	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String update(String passagemJson) {
+	public String update(@PathParam("id") Integer id ,String passagemJson) {
 		Passagem passagem = new Gson().fromJson(passagemJson, Passagem.class);
 		
-		PassagemDAO.updatePassagem(passagem);
-		passagem = PassagemDAO.findById(passagem.getId());
+		PassagemDAO.updatePassagem(id, passagem);
+		passagem = PassagemDAO.findById(id);
+		
+		//Not found 404
 		
 		return passagem.toJson();
 	}
@@ -73,7 +92,9 @@ public class PassagemResource {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void delete(@PathParam("id") Integer id) {
+		//Find
 		PassagemDAO.deletePassagem(id);
+		//Not found 404
 	}
 	
 }

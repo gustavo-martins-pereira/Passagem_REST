@@ -44,7 +44,7 @@ public class PassagemDAO {
 	}
 	
 	//Atualiza a Passagem
-	public static void updatePassagem(Passagem newPassagem) {
+	public static void updatePassagem(Integer id ,Passagem newPassagem) {
 		createEntityManager();
 		
 		// Procura a passagem com este id no banco
