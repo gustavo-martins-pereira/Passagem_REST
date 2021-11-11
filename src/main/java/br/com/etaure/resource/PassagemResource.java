@@ -2,7 +2,7 @@ package br.com.etaure.resource;
 
 import java.util.List;
 
-import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -62,12 +62,18 @@ public class PassagemResource {
 	public String update(String passagemJson) {
 		Passagem passagem = new Gson().fromJson(passagemJson, Passagem.class);
 		
-		System.out.println(passagem);
-		
 		PassagemDAO.updatePassagem(passagem);
 		passagem = PassagemDAO.findById(passagem.getId());
 		
 		return passagem.toJson();
+	}
+	
+	// Deleta uma passagem do banco
+	@DELETE
+	@Path("{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void delete(@PathParam("id") Integer id) {
+		PassagemDAO.deletePassagem(id);
 	}
 	
 }

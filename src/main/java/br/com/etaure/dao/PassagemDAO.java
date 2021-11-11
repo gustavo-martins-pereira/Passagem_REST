@@ -45,6 +45,8 @@ public class PassagemDAO {
 	
 	//Atualiza a Passagem
 	public static void updatePassagem(Passagem newPassagem) {
+		createEntityManager();
+		
 		// Procura a passagem com este id no banco
 		Passagem passagem = em.find(Passagem.class, newPassagem.getId());
 		
@@ -60,6 +62,8 @@ public class PassagemDAO {
 
 	//Deleta a Passagem
 	public static void deletePassagem(Integer id) {
+		createEntityManager();
+		
 		Passagem passagem = em.find(Passagem.class, id);
 		
 		em.getTransaction().begin();
