@@ -20,12 +20,14 @@ public class PassagemDAO {
 	}
 	
 	//Inserir uma Passagem
-	public static void insert(Passagem passagem) {
+	public static Passagem insert(Passagem passagem) {
 		createEntityManager();
 		
 		em.getTransaction().begin();
 		em.persist(passagem);
 		em.getTransaction().commit();
+		
+		return passagem;
 	}
 	
 	//Listar todas as Passagens
