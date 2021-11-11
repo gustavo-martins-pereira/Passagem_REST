@@ -96,10 +96,16 @@ public class PassagemResource {
 	@DELETE
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void delete(@PathParam("id") Integer id) {
-		//Find
-		PassagemDAO.deletePassagem(id);
-		//Not found 404
+	public Response delete(@PathParam("id") Integer id) {
+		Passagem passagem = PassagemDAO.findById(id);
+		
+		if(passagem == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		} else {
+			PassagemDAO.deletePassagem(id);
+			
+			return Response.ok().build();
+		}
 	}
 	
 }
