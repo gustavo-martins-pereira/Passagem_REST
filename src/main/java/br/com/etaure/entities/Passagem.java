@@ -7,7 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
@@ -19,15 +22,27 @@ public class Passagem implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@NotNull
 	private Integer id;
 	
 	@Column(name = "nome_passageiro")
+	@NotNull(message = "O nome do passageiro não pode ser nulo")
+	@NotBlank(message = "O campo não pode estar vazio")
+	@Size(min = 3, max = 50, message = "O nome deve ter no mínimo 3 letras e no máximo 50")
 	private String nomeDoPassageiro;
+	
+	@NotNull(message = "A origem da passagem não pode ser nulo")
+	@NotBlank(message = "O campo não pode estar vazio")
+	@Size(min = 2, max = 50, message = "A origem deve ter no mínimo 2 letras e no máximo 50")
 	private String origem;
+	
+	@NotNull(message = "O destino da passagem não pode ser nulo")
+	@NotBlank(message = "O campo não pode estar vazio")
+	@Size(min = 2, max = 50, message = "O destino deve ter no mínimo 2 letras e no máximo 50")
 	private String destino;
 	
 	@Column(name = "valor_passagem")
+	@NotNull(message = "O valor da passagem não pode ser nulo")
+	@Digits(integer = 3, fraction = 2, message = "O número deve conter somente 3 dígitos e 2 casas decimais")
 	private Double valorDaPassagem;
 	
 	public Passagem() {

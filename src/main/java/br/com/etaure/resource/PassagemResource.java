@@ -3,7 +3,12 @@ package br.com.etaure.resource;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -22,6 +27,9 @@ import br.com.etaure.entities.Passagem;
 
 @Path("passagens")
 public class PassagemResource {
+	
+	private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+	private Validator validator = factory.getValidator();
 	
 	// Lista todas as Passagens
 	@GET
@@ -61,17 +69,28 @@ public class PassagemResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response add(String passagemJson) throws URISyntaxException {
-		Passagem passagem = new Gson().fromJson(passagemJson, Passagem.class);
 		// TODO Melhoria pra receber o Json sem o "id"		
+		Passagem passagem = new Gson().fromJson(passagemJson, Passagem.class);
+
 		passagem.setId(null);
-		// TODO Verifica se os campos são válidos
-		
-		PassagemDAO.insert(passagem);
-		
-		// Prepara a URI para redirecionar o cliente para a nova passagem
-		URI uri = new URI("passagens/" + passagem.getId());
-		
-		return Response.created(uri).status(Status.CREATED).build();
+
+		// Verifica se os campos são válidos
+		Set<ConstraintViolation<Passagem>> violations = validator.validate(passagem);
+
+		if(violations.isEmpty()) {
+			PassagemDAO.insert(passagem);
+			
+			// Prepara a URI para redirecionar o cliente para a nova passagem
+			URI uri = new URI("passagens/" + passagem.getId());
+			
+			return Response.created(uri).status(Status.CREATED).build();
+		} else {
+			for (ConstraintViolation<Passagem> violation : violations) {
+				System.out.println(violation.getMessage());
+			}
+			
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 	}
 	
 	// Atualiza uma Passagem que já existe no banco de acordo com o "id" passado como parâmetro pela requisição HTTP
