@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -24,12 +25,6 @@ public class Passagem implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name = "nome_passageiro")
-	@NotNull(message = "O nome do passageiro não pode ser nulo")
-	@NotBlank(message = "O campo não pode estar vazio")
-	@Size(min = 3, max = 50, message = "O nome deve ter no mínimo 3 letras e no máximo 50")
-	private String nomeDoPassageiro;
-	
 	@NotNull(message = "A origem da passagem não pode ser nulo")
 	@NotBlank(message = "O campo não pode estar vazio")
 	@Size(min = 2, max = 50, message = "A origem deve ter no mínimo 2 letras e no máximo 50")
@@ -45,16 +40,19 @@ public class Passagem implements Serializable {
 	@Digits(integer = 3, fraction = 2, message = "O número deve conter somente 3 dígitos e 2 casas decimais")
 	private Double valorDaPassagem;
 	
+	@ManyToOne
+	private Passageiro passageiro;
+	
 	public Passagem() {
 		
 	}
 
-	public Passagem(Integer id, String nomeDoPassageiro, String origem, String destino, Double valorDaPassagem) {
+	public Passagem(Integer id, String origem, String destino, Double valorDaPassagem, Passageiro passageiro) {
 		this.id = id;
-		this.nomeDoPassageiro = nomeDoPassageiro;
 		this.origem = origem;
 		this.destino = destino;
 		this.valorDaPassagem = valorDaPassagem;
+		this.passageiro = passageiro;
 	}
 
 	public Integer getId() {
@@ -63,14 +61,6 @@ public class Passagem implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getNomeDoPassageiro() {
-		return nomeDoPassageiro;
-	}
-
-	public void setNomeDoPassageiro(String nomeDoPassageiro) {
-		this.nomeDoPassageiro = nomeDoPassageiro;
 	}
 
 	public String getOrigem() {
@@ -97,10 +87,18 @@ public class Passagem implements Serializable {
 		this.valorDaPassagem = valorDaPassagem;
 	}
 
+	public Passageiro getPassageiro() {
+		return passageiro;
+	}
+
+	public void setPassageiro(Passageiro passageiro) {
+		this.passageiro = passageiro;
+	}
+
 	@Override
 	public String toString() {
-		return "Passagem [id=" + id + ", nomeDoPassageiro=" + nomeDoPassageiro + ", origem=" + origem + ", destino="
-				+ destino + ", valorDaPassagem=" + valorDaPassagem + "]";
+		return "Passagem [id=" + id + ", origem=" + origem + ", destino=" + destino + ", valorDaPassagem="
+				+ valorDaPassagem + ", passageiro=" + passageiro + "]";
 	}
 
 	public String toXML() {

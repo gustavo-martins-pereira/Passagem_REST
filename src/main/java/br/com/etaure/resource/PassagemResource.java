@@ -90,7 +90,7 @@ public class PassagemResource {
 				sb.append(violation.getMessage());
 			}
 
-			return Response.ok(sb.toString()).status(Status.NOT_ACCEPTABLE).build();
+			return Response.ok(sb.toString()).status(Status.NOT_FOUND).build();
 		}
 	}
 
@@ -120,7 +120,7 @@ public class PassagemResource {
 					sb.append(violation.getMessage());
 				}
 
-				return Response.ok(sb.toString()).status(Status.NOT_ACCEPTABLE).build();
+				return Response.ok(sb.toString()).status(Status.NOT_FOUND).build();
 			}
 		
 		}

@@ -34,7 +34,7 @@ public class PassagemDAO {
 	public static List<Passagem> findAll() {
 		createEntityManager();
 		
-		String jpql = "SELECT p FROM Passagem p ORDER BY nome_passageiro";
+		String jpql = "SELECT p FROM Passagem p";
 		return em.createQuery(jpql, Passagem.class).getResultList();
 	}
 
@@ -54,7 +54,7 @@ public class PassagemDAO {
 		
 		em.getTransaction().begin();
 		
-		passagem.setNomeDoPassageiro(newPassagem.getNomeDoPassageiro());
+		passagem.setPassageiro(newPassagem.getPassageiro());
 		passagem.setOrigem(newPassagem.getOrigem());
 		passagem.setDestino(newPassagem.getDestino());
 		passagem.setValorDaPassagem(newPassagem.getValorDaPassagem());
