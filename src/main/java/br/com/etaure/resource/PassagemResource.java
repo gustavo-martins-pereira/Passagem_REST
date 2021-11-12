@@ -85,11 +85,12 @@ public class PassagemResource {
 
 			return Response.created(uri).status(Status.CREATED).build();
 		} else {
+			StringBuilder sb = new StringBuilder();
 			for (ConstraintViolation<Passagem> violation : violations) {
-				System.out.println(violation.getMessage());
+				sb.append(violation.getMessage());
 			}
 
-			return Response.status(Status.NOT_ACCEPTABLE).build();
+			return Response.ok(sb.toString()).status(Status.NOT_ACCEPTABLE).build();
 		}
 	}
 
@@ -114,11 +115,12 @@ public class PassagemResource {
 
 				return Response.ok().build();
 			} else {
+				StringBuilder sb = new StringBuilder();
 				for (ConstraintViolation<Passagem> violation : violations) {
-					System.out.println(violation.getMessage());
+					sb.append(violation.getMessage());
 				}
 
-				return Response.status(Status.NOT_ACCEPTABLE).build();
+				return Response.ok(sb.toString()).status(Status.NOT_ACCEPTABLE).build();
 			}
 		
 		}
