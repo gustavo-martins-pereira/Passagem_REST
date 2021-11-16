@@ -23,15 +23,16 @@ import javax.ws.rs.core.Response.Status;
 import com.google.gson.Gson;
 
 import br.com.etaure.dao.PassageiroDAO;
+import br.com.etaure.dao.PassagemDAO;
 import br.com.etaure.entities.Passageiro;
+import br.com.etaure.entities.Passagem;
+import br.com.etaure.entities.dto.PassageiroComPassagensDTO;
 
 @Path("passageiros")
 public class PassageiroResource {
 
 	private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 	private Validator validator = factory.getValidator();
-
-	// Origem, destino e valor
 	
 	// Lista todos os Passageiros
 	@GET
@@ -63,7 +64,12 @@ public class PassageiroResource {
 		if (passageiro == null) {
 			return Response.status(Status.NOT_FOUND).build();
 		} else {
-			return Response.ok(passageiro.toJson()).build();
+			// Retorna as passagens
+			List<Passagem> passagens = PassagemDAO.findPassagensByIdPassageiro(id);
+			
+			PassageiroComPassagensDTO passageiroComPassagensDTO = new PassageiroComPassagensDTO(id, passageiro.getNome(), passageiro.getNacionalidade(), passagens);
+			
+			return Response.ok(passageiroComPassagensDTO.toJson()).build();
 		}
 	}
 

@@ -22,6 +22,10 @@ public class Program {
 		
 		// Deleta um passageiro
 //		PassageiroDAO.delete(5);
+
+		// Mostra uma lista de passagens de acordo com o id do passageiro
+//		List<Passagem> passagens = PassageiroDAO.findPassagensByIdPassageiro(2);
+//		passagens.forEach(System.out::println);
 		
 	}
 
