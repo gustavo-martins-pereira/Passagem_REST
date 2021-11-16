@@ -22,8 +22,11 @@ import javax.ws.rs.core.Response.Status;
 
 import com.google.gson.Gson;
 
+import br.com.etaure.dao.PassageiroDAO;
 import br.com.etaure.dao.PassagemDAO;
+import br.com.etaure.entities.Passageiro;
 import br.com.etaure.entities.Passagem;
+import br.com.etaure.entities.dto.PassagemCriadaDTO;
 
 @Path("passagens")
 public class PassagemResource {
@@ -70,10 +73,13 @@ public class PassagemResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response add(String passagemJson) throws URISyntaxException {
 		// TODO Melhoria pra receber o Json sem o "id"
-		Passagem passagem = new Gson().fromJson(passagemJson, Passagem.class);
-
-		passagem.setId(null);
-
+		PassagemCriadaDTO passagemCriadaDTO = new Gson().fromJson(passagemJson, PassagemCriadaDTO.class);
+		
+		Passagem passagem = passagemCriadaDTO.retornarObjetoPassagem();
+		Passageiro passageiro = PassageiroDAO.findById(passagemCriadaDTO.getIdPassageiro());
+		
+		passagem.setPassageiro(passageiro);
+		
 		// Verifica se os campos são válidos
 		Set<ConstraintViolation<Passagem>> violations = validator.validate(passagem);
 

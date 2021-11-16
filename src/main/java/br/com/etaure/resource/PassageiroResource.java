@@ -31,6 +31,8 @@ public class PassageiroResource {
 	private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 	private Validator validator = factory.getValidator();
 
+	// Origem, destino e valor
+	
 	// Lista todos os Passageiros
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

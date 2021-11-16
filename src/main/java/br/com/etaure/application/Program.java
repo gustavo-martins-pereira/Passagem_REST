@@ -1,8 +1,5 @@
 package br.com.etaure.application;
 
-import br.com.etaure.dao.PassageiroDAO;
-import br.com.etaure.entities.Passageiro;
-
 public class Program {
 
 	public static void main(String[] args) {
