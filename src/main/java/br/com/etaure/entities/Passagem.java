@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -27,12 +26,10 @@ public class Passagem implements Serializable {
 	private Integer id;
 	
 	@NotNull(message = "A origem da passagem não pode ser nulo")
-	@NotBlank(message = "O campo não pode estar vazio")
 	@Size(min = 2, max = 50, message = "A origem deve ter no mínimo 2 letras e no máximo 50")
 	private String origem;
 	
 	@NotNull(message = "O destino da passagem não pode ser nulo")
-	@NotBlank(message = "O campo não pode estar vazio")
 	@Size(min = 2, max = 50, message = "O destino deve ter no mínimo 2 letras e no máximo 50")
 	private String destino;
 	

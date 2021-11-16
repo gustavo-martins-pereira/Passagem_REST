@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
@@ -15,7 +17,12 @@ public class Passageiro {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@NotNull(message = "O nome do passageiro não pode ser nulo")
+	@Size(min = 2, max = 50, message = "O nome deve ter no mínimo 2 letras e no máximo 50")
 	private String nome;
+	
+	@NotNull(message = "A nacionalidade do passageiro não pode ser nula")
+	@Size(min = 2, max = 50, message = "A nacionalidade deve ter no mínimo 2 letras e no máximo 50")
 	private String nacionalidade;
 	
 	public Passageiro() {
