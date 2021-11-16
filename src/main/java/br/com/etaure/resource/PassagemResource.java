@@ -111,7 +111,7 @@ public class PassagemResource {
 			Set<ConstraintViolation<Passagem>> violations = validator.validate(newPassagem);
 
 			if(violations.isEmpty()) {
-				PassagemDAO.updatePassagem(id, newPassagem);
+				PassagemDAO.update(id, newPassagem);
 
 				return Response.ok().build();
 			} else {
@@ -136,7 +136,7 @@ public class PassagemResource {
 		if (passagem == null) {
 			return Response.status(Status.NOT_FOUND).build();
 		} else {
-			PassagemDAO.deletePassagem(id);
+			PassagemDAO.delete(id);
 
 			return Response.ok().build();
 		}

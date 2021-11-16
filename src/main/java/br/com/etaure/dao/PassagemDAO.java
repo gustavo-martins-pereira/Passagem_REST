@@ -46,11 +46,11 @@ public class PassagemDAO {
 	}
 	
 	//Atualiza a Passagem
-	public static Passagem updatePassagem(Integer id ,Passagem newPassagem) {
+	public static Passagem update(Integer id, Passagem newPassagem) {
 		createEntityManager();
 		
 		// Procura a passagem com este id no banco
-		Passagem passagem = em.find(Passagem.class, newPassagem.getId());
+		Passagem passagem = em.find(Passagem.class, id);
 		
 		em.getTransaction().begin();
 		
@@ -61,11 +61,11 @@ public class PassagemDAO {
 		
 		em.getTransaction().commit();
 		
-		return em.find(Passagem.class, passagem.getId());
+		return em.find(Passagem.class, id);
 	}
 
 	//Deleta a Passagem
-	public static void deletePassagem(Integer id) {
+	public static void delete(Integer id) {
 		createEntityManager();
 		
 		Passagem passagem = em.find(Passagem.class, id);

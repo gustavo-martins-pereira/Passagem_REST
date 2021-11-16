@@ -7,14 +7,24 @@ public class Program {
 
 	public static void main(String[] args) {
 
-		/* Passageiro passageiro = new Passageiro(null, "Gustavo", "Brasileiro");
-		Passagem passagem = new Passagem(1, "ES", "SP", 57.45, new Passageiro(6, "Maria", "Americana"));
-
-		System.out.println(passagem); */
+		// Inserir um novo Passageiro
+//		PassageiroDAO.insert(new Passageiro(null, "Vanilla", "Austrália"));
 		
-		Passageiro passageiro = new Passageiro(null, "Maria", "Americana");
-	
-		System.out.println(PassageiroDAO.insert(passageiro));
+		// Lista todos os passageiros
+//		List<Passageiro> passageiros = PassageiroDAO.findAll();
+//		passageiros.forEach(System.out::println);
+		
+		// Mostra o passageiro com o id específicado
+//		Passageiro passageiro = PassageiroDAO.findById(1);
+//		System.out.println(passageiro);
+		
+		// Atualiza um passageiro ja existente
+//		Passageiro passageiro = new Passageiro(null, "Gustavo", "Brasileiro");
+//		passageiro = PassageiroDAO.update(1, passageiro);
+//		System.out.println(passageiro);
+		
+		// Deleta um passageiro
+//		PassageiroDAO.delete(5);
 		
 	}
 
