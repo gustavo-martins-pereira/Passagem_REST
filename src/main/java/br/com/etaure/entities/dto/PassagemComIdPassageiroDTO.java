@@ -2,7 +2,7 @@ package br.com.etaure.entities.dto;
 
 import br.com.etaure.entities.Passagem;
 
-public class PassagemCriadaDTO {
+public class PassagemComIdPassageiroDTO {
 
 	private Integer id;
 	private String origem;
@@ -10,11 +10,11 @@ public class PassagemCriadaDTO {
 	private Double valorDaPassagem;
 	private Integer idPassageiro;
 	
-	public PassagemCriadaDTO() {
+	public PassagemComIdPassageiroDTO() {
 		
 	}
 	
-	public Passagem retornarObjetoPassagem() {
+	public Passagem retornarObjetoPassagem() throws IllegalArgumentException {
 		return new Passagem(null, this.origem, this.destino, this.valorDaPassagem, null);
 	}
 

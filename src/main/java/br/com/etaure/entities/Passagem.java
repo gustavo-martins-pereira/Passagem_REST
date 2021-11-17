@@ -46,7 +46,16 @@ public class Passagem implements Serializable {
 		
 	}
 
-	public Passagem(Integer id, String origem, String destino, Double valorDaPassagem, Passageiro passageiro) {
+	public Passagem(Integer id, String origem, String destino, Double valorDaPassagem, Passageiro passageiro) throws IllegalArgumentException {
+		// Validação das variáveis
+		if(origem.equalsIgnoreCase(destino)) {
+			throw new IllegalArgumentException("O destino da viagem não pode ser igual à origem");
+		}
+		
+		if(valorDaPassagem < 0) {
+			throw new IllegalArgumentException("O valor da passagem não pode ser negativo");
+		}
+		
 		this.id = id;
 		this.origem = origem;
 		this.destino = destino;

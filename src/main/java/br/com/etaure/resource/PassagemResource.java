@@ -26,7 +26,7 @@ import br.com.etaure.dao.PassageiroDAO;
 import br.com.etaure.dao.PassagemDAO;
 import br.com.etaure.entities.Passageiro;
 import br.com.etaure.entities.Passagem;
-import br.com.etaure.entities.dto.PassagemCriadaDTO;
+import br.com.etaure.entities.dto.PassagemComIdPassageiroDTO;
 
 @Path("passagens")
 public class PassagemResource {
@@ -43,7 +43,7 @@ public class PassagemResource {
 		if (passagens.isEmpty()) {
 			return Response.status(Status.NO_CONTENT).build();
 		} else {
-			// Caso tenha ao menos 1 passagem, retorna todas as passagens registradas
+			// Caso tenha ao menos 1 passagem, retorna todas as passagens registradas em formato Json
 			StringBuilder sb = new StringBuilder();
 
 			for (Passagem passagem : passagens) {
@@ -72,17 +72,31 @@ public class PassagemResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response add(String passagemJson) throws URISyntaxException {
-		// TODO Melhoria pra receber o Json sem o "id"
-		PassagemCriadaDTO passagemCriadaDTO = new Gson().fromJson(passagemJson, PassagemCriadaDTO.class);
+		// Transforma os parâmetros passados em formato Json para um novo objeto PassagemCriadaDTO que contêm os valores da passagem e somente o id do passageiro
+		PassagemComIdPassageiroDTO passagemComIdPassageiroDTO = new Gson().fromJson(passagemJson, PassagemComIdPassageiroDTO.class);
 		
-		Passagem passagem = passagemCriadaDTO.retornarObjetoPassagem();
-		Passageiro passageiro = PassageiroDAO.findById(passagemCriadaDTO.getIdPassageiro());
+		// Se contiver dados inválidos, informa ao usuário mandando um erro 400
+		Passagem passagem = null;
+		try {
+			passagem = passagemComIdPassageiroDTO.retornarObjetoPassagem();
+		} catch(IllegalArgumentException e) {
+			return Response.ok(e.getMessage()).status(Status.BAD_REQUEST).build(); 
+		}
 		
-		passagem.setPassageiro(passageiro);
+		// Procura pelo id do passageiro no banco
+		Passageiro passageiro = PassageiroDAO.findById(passagemComIdPassageiroDTO.getIdPassageiro());
+		
+		// Se contiver o passageiro com o id especificado no banco, atribui ao objeto Passagem
+		if(passageiro == null) {
+			return Response.ok("Id do passageiro não encontrado no banco").status(Status.NOT_FOUND).build();
+		} else {
+			passagem.setPassageiro(passageiro);
+		}
 		
 		// Verifica se os campos são válidos
 		Set<ConstraintViolation<Passagem>> violations = validator.validate(passagem);
 
+		// Caso contenha ao menos 1 erro, retorna as mensagens de erro de parâmetro para o usuário, caso não tenha, insere uma nova passagem no banco
 		if (violations.isEmpty()) {
 			PassagemDAO.insert(passagem);
 
@@ -106,16 +120,30 @@ public class PassagemResource {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response update(@PathParam("id") Integer id, String passagemJson) throws URISyntaxException {
-		Passagem newPassagem = new Gson().fromJson(passagemJson, Passagem.class);
+		PassagemComIdPassageiroDTO passagemTemporaria = new Gson().fromJson(passagemJson, PassagemComIdPassageiroDTO.class);
 		
+		Passagem newPassagem = null;
+		// Cria uma nova passagem sem o Passageiro
+		try {
+			newPassagem = passagemTemporaria.retornarObjetoPassagem();
+		} catch(IllegalArgumentException e) {
+			return Response.ok(e.getMessage()).status(Status.BAD_REQUEST).build();
+		}
+		
+		// Verifica se existe a Passagem com o id passado por parâmetro no banco,
+		// e o Passageiro passado no corpo da requisição
 		Passagem oldPassagem = PassagemDAO.findById(id);
+		Passageiro passageiro = PassageiroDAO.findById(passagemTemporaria.getIdPassageiro());
 		
-		if (oldPassagem == null) {
+		if (oldPassagem == null || passageiro == null) {
 			return Response.status(Status.NOT_FOUND).build();
 		} else {
+			newPassagem.setPassageiro(passageiro);
+			
 			// Verifica se os campos são válidos
 			Set<ConstraintViolation<Passagem>> violations = validator.validate(newPassagem);
 
+			// Atualiza a passagem antiga com os dados da nova Passagem
 			if(violations.isEmpty()) {
 				PassagemDAO.update(id, newPassagem);
 
@@ -126,6 +154,7 @@ public class PassagemResource {
 					sb.append(violation.getMessage());
 				}
 
+				// Retorna uma resposta HTTP com todos os requisitos que não foram cumpridos
 				return Response.ok(sb.toString()).status(Status.NOT_FOUND).build();
 			}
 		

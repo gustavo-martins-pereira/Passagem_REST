@@ -27,6 +27,11 @@ public class Program {
 //		List<Passagem> passagens = PassageiroDAO.findPassagensByIdPassageiro(2);
 //		passagens.forEach(System.out::println);
 		
+		String origem = "ES";
+		String destino = "ES";
+		
+		System.out.println(origem.equalsIgnoreCase(destino));
+		
 	}
 
 }
